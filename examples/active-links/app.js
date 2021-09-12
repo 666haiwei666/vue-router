@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import VueRouter from 'vue-router'
+import VueRouter from '../../src/index'
 
 Vue.use(VueRouter)
 
@@ -42,12 +42,13 @@ const router = new VueRouter({
     {
       path: '/redirect-image',
       name: 'redirect-image',
-      redirect: { name: 'image', params: { imageId: 'image1' }}
+      redirect: { name: 'image', params: { imageId: 'image1' } }
     },
     {
       path: '/users',
       component: Users,
-      children: [{ path: ':username', name: 'user', component: User }]
+      children: [{ path: ':username', name: 'user', component: User },
+      { path: '/username', name: 'user', component: About }]
     },
     {
       path: '/gallery',
@@ -56,7 +57,7 @@ const router = new VueRouter({
         {
           path: '',
           name: 'gallery',
-          redirect: { name: 'image', params: { imageId: 'image1' }}
+          redirect: { name: 'image', params: { imageId: 'image1' } }
         },
         { path: ':imageId', component: Image, name: 'image' }
       ]

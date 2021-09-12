@@ -114,10 +114,11 @@ export interface RouterOptions {
 
 type RoutePropsFunction = (route: Route) => Object
 
+
 export interface PathToRegexpOptions {
-  sensitive?: boolean
-  strict?: boolean
-  end?: boolean
+  sensitive?: boolean // sensitive 大小写敏感 (default: false)
+  strict?: boolean // 末尾斜杠是否精确匹配 (default: false)
+  end?: boolean //全局匹配 (default: true)
 }
 
 interface _RouteConfigBase {

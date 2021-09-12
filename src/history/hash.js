@@ -46,6 +46,7 @@ export class HashHistory extends History {
         }
       })
     }
+    // 当活动历史记录条目更改时，将触发popstate事件。
     const eventType = supportsPushState ? 'popstate' : 'hashchange'
     window.addEventListener(
       eventType,
@@ -100,6 +101,7 @@ export class HashHistory extends History {
 
 function checkFallback (base) {
   const location = getLocation(base)
+  // 如果当前路径不是以/#开头，则replace当前路径
   if (!/^\/#/.test(location)) {
     window.location.replace(cleanPath(base + '/#' + location))
     return true
@@ -108,6 +110,7 @@ function checkFallback (base) {
 
 function ensureSlash (): boolean {
   const path = getHash()
+  // 说明
   if (path.charAt(0) === '/') {
     return true
   }
@@ -116,6 +119,7 @@ function ensureSlash (): boolean {
 }
 
 export function getHash (): string {
+  // 无法在此处使用window.location.hash，因为它不是跨浏览器一致-Firefox将对其进行预解码
   // We can't use window.location.hash here because it's not
   // consistent across browsers - Firefox will pre-decode it!
   let href = window.location.href

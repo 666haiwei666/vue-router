@@ -31,14 +31,23 @@ type Position = { x: number, y: number };
 type PositionResult = Position | { selector: string, offset?: Position } | void;
 
 declare type RouterOptions = {
+  // 页面的配置路径
   routes?: Array<RouteConfig>;
+  // 模式
   mode?: string;
+  // 当浏览器不支持 history.pushState 控制路由是否应该回退到 hash 模式。默认值为 true
   fallback?: boolean;
+  // 应用的基路径
   base?: string;
+  // 全局配置 <router-link> 默认的激活的 class
   linkActiveClass?: string;
+  // 全局配置 <router-link> 默认的精确激活的 class
   linkExactActiveClass?: string;
+  // 提供自定义查询字符串的解析函数。覆盖默认行为
   parseQuery?: (query: string) => Object;
+  // // 提供自定义查询字符串的反解析函数。覆盖默认行为
   stringifyQuery?: (query: Object) => string;
+  // return 期望滚动到哪个的位置
   scrollBehavior?: (
     to: Route,
     from: Route,

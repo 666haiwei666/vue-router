@@ -33,7 +33,7 @@ export class History {
   errorCbs: Array<Function>
   listeners: Array<Function>
   cleanupListeners: Function
-
+  // + 表示静态方法
   // implemented by sub-classes
   +go: (n: number) => void
   +push: (loc: RawLocation, onComplete?: Function, onAbort?: Function) => void
@@ -88,6 +88,7 @@ export class History {
     try {
       route = this.router.match(location, this.current)
     } catch (e) {
+      // 依次调用错误的回调函数
       this.errorCbs.forEach(cb => {
         cb(e)
       })
@@ -154,6 +155,7 @@ export class History {
     }
     const lastRouteIndex = route.matched.length - 1
     const lastCurrentIndex = current.matched.length - 1
+    // 当前路由和跳转路由不能相同
     if (
       isSameRoute(route, current) &&
       // in the case the route map has been dynamically appended to
@@ -163,12 +165,12 @@ export class History {
       this.ensureURL()
       return abort(createNavigationDuplicatedError(current, route))
     }
-
+    // debugger
     const { updated, deactivated, activated } = resolveQueue(
       this.current.matched,
       route.matched
     )
-
+    // debugger
     const queue: Array<?NavigationGuard> = [].concat(
       // in-component leave guards
       extractLeaveGuards(deactivated),
@@ -309,14 +311,17 @@ function extractGuards (
   bind: Function,
   reverse?: boolean
 ): Array<?Function> {
+  // debugger
   const guards = flatMapComponents(records, (def, instance, match, key) => {
     const guard = extractGuard(def, name)
+    console.log(guard)
     if (guard) {
       return Array.isArray(guard)
         ? guard.map(guard => bind(guard, instance, match, key))
         : bind(guard, instance, match, key)
     }
   })
+  console.log(guards)
   return flatten(reverse ? guards.reverse() : guards)
 }
 
@@ -324,13 +329,14 @@ function extractGuard (
   def: Object | Function,
   key: string
 ): NavigationGuard | Array<NavigationGuard> {
+  // debugger
   if (typeof def !== 'function') {
     // extend now so that global mixins are applied.
     def = _Vue.extend(def)
   }
   return def.options[key]
 }
-
+// 调用离开守卫
 function extractLeaveGuards (deactivated: Array<RouteRecord>): Array<?Function> {
   return extractGuards(deactivated, 'beforeRouteLeave', bindGuard, true)
 }

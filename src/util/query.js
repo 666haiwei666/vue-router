@@ -14,7 +14,7 @@ const encode = str =>
     .replace(encodeReserveRE, encodeReserveReplacer)
     .replace(commaRE, ',')
 
-export function decode (str: string) {
+export function decode(str: string) {
   try {
     return decodeURIComponent(str)
   } catch (err) {
@@ -25,11 +25,12 @@ export function decode (str: string) {
   return str
 }
 
-export function resolveQuery (
+export function resolveQuery(
   query: ?string,
   extraQuery: Dictionary<string> = {},
   _parseQuery: ?Function
 ): Dictionary<string> {
+  // debugger
   const parse = _parseQuery || parseQuery
   let parsedQuery
   try {
@@ -40,6 +41,8 @@ export function resolveQuery (
   }
   for (const key in extraQuery) {
     const value = extraQuery[key]
+    // 如果传递的参数是数组， 假如query: { name: [1,2,3,4] }，在变成name=1&name=2&name=3&name=4
+    // 如果传递是null或者对象，会被转为字符串
     parsedQuery[key] = Array.isArray(value)
       ? value.map(castQueryParamValue)
       : castQueryParamValue(value)
@@ -49,18 +52,18 @@ export function resolveQuery (
 
 const castQueryParamValue = value => (value == null || typeof value === 'object' ? value : String(value))
 
-function parseQuery (query: string): Dictionary<string> {
+function parseQuery(query: string): Dictionary<string> {
   const res = {}
-
+  // 如果以?|#|&开头，替换为''
   query = query.trim().replace(/^(\?|#|&)/, '')
 
   if (!query) {
     return res
   }
-
+  // debugger
   query.split('&').forEach(param => {
     const parts = param.replace(/\+/g, ' ').split('=')
-    const key = decode(parts.shift())
+    const key = decode(parts.shift()) // 使用decodeURIComponent进行解码
     const val = parts.length > 0 ? decode(parts.join('=')) : null
 
     if (res[key] === undefined) {
@@ -75,7 +78,7 @@ function parseQuery (query: string): Dictionary<string> {
   return res
 }
 
-export function stringifyQuery (obj: Dictionary<string>): string {
+export function stringifyQuery(obj: Dictionary<string>): string {
   const res = obj
     ? Object.keys(obj)
       .map(key => {

@@ -7,9 +7,11 @@ import { extend } from './misc'
 
 const positionStore = Object.create(null)
 
-export function setupScroll () {
+export function setupScroll() {
   // Prevent browser scroll behavior on History popstate
   if ('scrollRestoration' in window.history) {
+    // window.history.scrollRestoration利用浏览器特性回到上一个页面滚动位置
+    // auto 滚动 manual 不滚动
     window.history.scrollRestoration = 'manual'
   }
   // Fix for #1585 for Firefox
@@ -20,16 +22,20 @@ export function setupScroll () {
   const protocolAndPath = window.location.protocol + '//' + window.location.host
   const absolutePath = window.location.href.replace(protocolAndPath, '')
   // preserve existing history state as it could be overriden by the user
+  // 获取当前路径的参数 以key，value的形式
   const stateCopy = extend({}, window.history.state)
+  // 当前时间
   stateCopy.key = getStateKey()
+  // 会直接替换掉当前url，而不会在history中留下记录
   window.history.replaceState(stateCopy, '', absolutePath)
+  // 当活动历史记录条目更改时，将触发popstate事件。
   window.addEventListener('popstate', handlePopState)
   return () => {
     window.removeEventListener('popstate', handlePopState)
   }
 }
 
-export function handleScroll (
+export function handleScroll(
   router: Router,
   to: Route,
   from: Route,
@@ -77,8 +83,8 @@ export function handleScroll (
     }
   })
 }
-
-export function saveScrollPosition () {
+// 用当前时间戳作为key，记录页面的滚动位置
+export function saveScrollPosition() {
   const key = getStateKey()
   if (key) {
     positionStore[key] = {
@@ -87,22 +93,22 @@ export function saveScrollPosition () {
     }
   }
 }
-
-function handlePopState (e) {
+// 用当前时间戳作为key，记录页面的滚动位置
+function handlePopState(e) {
   saveScrollPosition()
   if (e.state && e.state.key) {
     setStateKey(e.state.key)
   }
 }
 
-function getScrollPosition (): ?Object {
+function getScrollPosition(): ?Object {
   const key = getStateKey()
   if (key) {
     return positionStore[key]
   }
 }
 
-function getElementPosition (el: Element, offset: Object): Object {
+function getElementPosition(el: Element, offset: Object): Object {
   const docEl: any = document.documentElement
   const docRect = docEl.getBoundingClientRect()
   const elRect = el.getBoundingClientRect()
@@ -112,31 +118,31 @@ function getElementPosition (el: Element, offset: Object): Object {
   }
 }
 
-function isValidPosition (obj: Object): boolean {
+function isValidPosition(obj: Object): boolean {
   return isNumber(obj.x) || isNumber(obj.y)
 }
 
-function normalizePosition (obj: Object): Object {
+function normalizePosition(obj: Object): Object {
   return {
     x: isNumber(obj.x) ? obj.x : window.pageXOffset,
     y: isNumber(obj.y) ? obj.y : window.pageYOffset
   }
 }
 
-function normalizeOffset (obj: Object): Object {
+function normalizeOffset(obj: Object): Object {
   return {
     x: isNumber(obj.x) ? obj.x : 0,
     y: isNumber(obj.y) ? obj.y : 0
   }
 }
 
-function isNumber (v: any): boolean {
+function isNumber(v: any): boolean {
   return typeof v === 'number'
 }
 
 const hashStartsWithNumberRE = /^#\d/
 
-function scrollToPosition (shouldScroll, position) {
+function scrollToPosition(shouldScroll, position) {
   const isObject = typeof shouldScroll === 'object'
   if (isObject && typeof shouldScroll.selector === 'string') {
     // getElementById would still fail if the selector contains a more complicated query like #main[data-attr]

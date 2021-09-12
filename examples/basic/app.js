@@ -96,15 +96,14 @@ const vueInstance = new Vue({
       <router-view class="view"></router-view>
     </div>
   `,
-
+  mounted() {
+  },
   methods: {
-    navigateAndIncrement () {
+    navigateAndIncrement() {
       const increment = () => this.n++
-      if (this.$route.path === '/') {
-        this.$router.push('/foo', increment)
-      } else {
-        this.$router.push('/', increment)
-      }
+      this.$router.push({
+        path: '/'
+      }, increment)
     }
   }
 }).$mount('#app')

@@ -25,7 +25,7 @@ export default class VueRouter {
   static NavigationFailureType: any
   static START_LOCATION: Route
 
-  app: any
+  app: any // Vue instance
   apps: Array<any>
   ready: boolean
   readyCbs: Array<Function>
@@ -41,18 +41,23 @@ export default class VueRouter {
   constructor (options: RouterOptions = {}) {
     this.app = null
     this.apps = []
+    // 用户参数
     this.options = options
     this.beforeHooks = []
     this.resolveHooks = []
     this.afterHooks = []
+    // 返回一个对象
+    // 包含match，addRoutes，addRoute，getRoutes
     this.matcher = createMatcher(options.routes || [], this)
-
+    // 默认hash
     let mode = options.mode || 'hash'
     this.fallback =
       mode === 'history' && !supportsPushState && options.fallback !== false
+    // 选择history模式，但是不支持pushState，并且支持回退，设置为hash
     if (this.fallback) {
       mode = 'hash'
     }
+    // 支持所有 JavaScript 运行环境，如 Node.js 服务器端。如果发现没有浏览器的 API，路由会自动强制进入这个模式
     if (!inBrowser) {
       mode = 'abstract'
     }
@@ -95,6 +100,7 @@ export default class VueRouter {
 
     // set up app destroyed handler
     // https://github.com/vuejs/vue-router/issues/2639
+    // 注册一个销毁事件
     app.$once('hook:destroyed', () => {
       // clean out app from this.apps array once destroyed
       const index = this.apps.indexOf(app)
@@ -127,6 +133,7 @@ export default class VueRouter {
         }
       }
       const setupListeners = routeOrError => {
+        // debugger
         history.setupListeners()
         handleInitialScroll(routeOrError)
       }
@@ -143,15 +150,15 @@ export default class VueRouter {
       })
     })
   }
-
+  // 注册一个全局前置守卫
   beforeEach (fn: Function): Function {
     return registerHook(this.beforeHooks, fn)
   }
-
+  // 全局解析守卫
   beforeResolve (fn: Function): Function {
     return registerHook(this.resolveHooks, fn)
   }
-
+  // 全局后置钩子
   afterEach (fn: Function): Function {
     return registerHook(this.afterHooks, fn)
   }
