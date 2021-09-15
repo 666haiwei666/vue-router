@@ -27,10 +27,10 @@ export function resolvePath (
 
   // resolve relative path
   // 匹配relative路径，并且以/分割
-  const segments = relative.replace(/^\//, '').split('/')  
+  const segments = relative.replace(/^\//, '').split('/')
   for (let i = 0; i < segments.length; i++) {
     const segment = segments[i]
-   // 如果是.. ，返回stack删除最后一个元素
+    // 如果是.. ，返回stack删除最后一个元素
     if (segment === '..') {
       stack.pop()
       // 如果是.，则push

@@ -10,13 +10,13 @@ import { pushState, replaceState, supportsPushState } from '../util/push-state'
 export class HTML5History extends History {
   _startLocation: string  // 保存当前的完整的路径
 
-  constructor(router: Router, base: ?string) {
+  constructor (router: Router, base: ?string) {
     super(router, base)
 
     this._startLocation = getLocation(this.base)
   }
 
-  setupListeners() {
+  setupListeners () {
     if (this.listeners.length > 0) {
       return
     }
@@ -29,6 +29,7 @@ export class HTML5History extends History {
       this.listeners.push(setupScroll())
     }
     console.log(this.listeners)
+    // 监听popstate感知路径变化，调用transitionTo,执行push
     const handleRoutingEvent = () => {
       const current = this.current
 
@@ -52,13 +53,13 @@ export class HTML5History extends History {
     })
   }
   // 调用浏览器原生的window.history.go
-  go(n: number) {
+  go (n: number) {
     window.history.go(n)
   }
   // 路由对象
-  // onComplete 这些回调将会在导航成功完成 (在所有的异步钩子被解析之后) 
+  // onComplete 这些回调将会在导航成功完成 (在所有的异步钩子被解析之后)
   // onAbort 终止 (导航到相同的路由、或在当前导航完成之前导航到另一个不同的路由) 的时候进行相应的调用
-  push(location: RawLocation, onComplete?: Function, onAbort?: Function) {
+  push (location: RawLocation, onComplete?: Function, onAbort?: Function) {
     const { current: fromRoute } = this
     this.transitionTo(location, route => {
       pushState(cleanPath(this.base + route.fullPath))
@@ -67,7 +68,7 @@ export class HTML5History extends History {
     }, onAbort)
   }
 
-  replace(location: RawLocation, onComplete?: Function, onAbort?: Function) {
+  replace (location: RawLocation, onComplete?: Function, onAbort?: Function) {
     const { current: fromRoute } = this
     this.transitionTo(location, route => {
       replaceState(cleanPath(this.base + route.fullPath))
@@ -76,19 +77,19 @@ export class HTML5History extends History {
     }, onAbort)
   }
 
-  ensureURL(push?: boolean) {
+  ensureURL (push?: boolean) {
     if (getLocation(this.base) !== this.current.fullPath) {
       const current = cleanPath(this.base + this.current.fullPath)
       push ? pushState(current) : replaceState(current)
     }
   }
 
-  getCurrentLocation(): string {
+  getCurrentLocation (): string {
     return getLocation(this.base)
   }
 }
 // 得到完整的路径
-export function getLocation(base: string): string {
+export function getLocation (base: string): string {
   // 当前页面的路径（没有参数）
   let path = window.location.pathname
   const pathLowerCase = path.toLowerCase()

@@ -17,7 +17,7 @@ export type Matcher = {
 };
 // routes用户传过来的页面路径
 // router VueRouter实例
-export function createMatcher(
+export function createMatcher (
   routes: Array<RouteConfig>,
   router: VueRouter
 ): Matcher {
@@ -25,11 +25,11 @@ export function createMatcher(
   const { pathList, pathMap, nameMap } = createRouteMap(routes)
   // console.log(createRouteMap(routes))
 
-  function addRoutes(routes) {
+  function addRoutes (routes) {
     createRouteMap(routes, pathList, pathMap, nameMap)
   }
 
-  function addRoute(parentOrRoute, route) {
+  function addRoute (parentOrRoute, route) {
     const parent = (typeof parentOrRoute !== 'object') ? nameMap[parentOrRoute] : undefined
     // $flow-disable-line
     createRouteMap([route || parentOrRoute], pathList, pathMap, nameMap, parent)
@@ -47,11 +47,11 @@ export function createMatcher(
     }
   }
 
-  function getRoutes() {
+  function getRoutes () {
     return pathList.map(path => pathMap[path])
   }
 
-  function match(
+  function match (
     raw: RawLocation, // 传递的路由的参数
     currentRoute?: Route, // 当前浏览器的路由
     redirectedFrom?: Location
@@ -97,7 +97,7 @@ export function createMatcher(
     return _createRoute(null, location)
   }
 
-  function redirect(
+  function redirect (
     record: RouteRecord,
     location: Location
   ): Route {
@@ -159,12 +159,13 @@ export function createMatcher(
     }
   }
 
-  function alias(
+  function alias (
     record: RouteRecord,
     location: Location,
     matchAs: string
   ): Route {
     const aliasedPath = fillParams(matchAs, location.params, `aliased route with path "${matchAs}"`)
+    debugger
     const aliasedMatch = match({
       _normalized: true,
       path: aliasedPath
@@ -178,7 +179,7 @@ export function createMatcher(
     return _createRoute(null, location)
   }
 
-  function _createRoute(
+  function _createRoute (
     record: ?RouteRecord,
     location: Location,
     redirectedFrom?: Location
@@ -200,7 +201,7 @@ export function createMatcher(
   }
 }
 
-function matchRoute(
+function matchRoute (
   regex: RouteRegExp,
   path: string,
   params: Object
@@ -224,6 +225,6 @@ function matchRoute(
   return true
 }
 
-function resolveRecordPath(path: string, record: RouteRecord): string {
+function resolveRecordPath (path: string, record: RouteRecord): string {
   return resolvePath(path, record.parent ? record.parent.path : '/', true)
 }

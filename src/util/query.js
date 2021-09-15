@@ -14,7 +14,7 @@ const encode = str =>
     .replace(encodeReserveRE, encodeReserveReplacer)
     .replace(commaRE, ',')
 
-export function decode(str: string) {
+export function decode (str: string) {
   try {
     return decodeURIComponent(str)
   } catch (err) {
@@ -25,7 +25,7 @@ export function decode(str: string) {
   return str
 }
 
-export function resolveQuery(
+export function resolveQuery (
   query: ?string,
   extraQuery: Dictionary<string> = {},
   _parseQuery: ?Function
@@ -52,7 +52,7 @@ export function resolveQuery(
 
 const castQueryParamValue = value => (value == null || typeof value === 'object' ? value : String(value))
 
-function parseQuery(query: string): Dictionary<string> {
+function parseQuery (query: string): Dictionary<string> {
   const res = {}
   // 如果以?|#|&开头，替换为''
   query = query.trim().replace(/^(\?|#|&)/, '')
@@ -78,7 +78,7 @@ function parseQuery(query: string): Dictionary<string> {
   return res
 }
 
-export function stringifyQuery(obj: Dictionary<string>): string {
+export function stringifyQuery (obj: Dictionary<string>): string {
   const res = obj
     ? Object.keys(obj)
       .map(key => {

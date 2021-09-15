@@ -36,7 +36,7 @@ export function normalizeLocation (
     next._normalized = true
     // 先拷贝了一份当前浏览的参数，在此基础上有合并了raw的参数
     const params: any = extend(extend({}, current.params), next.params)
-    //如果当前有name，则参数覆盖，名称也覆盖
+    // 如果当前有name，则参数覆盖，名称也覆盖
     if (current.name) {
       next.name = current.name
       next.params = params

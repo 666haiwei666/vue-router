@@ -3,6 +3,7 @@ import Link from './components/link'
 
 export let _Vue
 export function install (Vue) {
+  // 判断vue-router 是否安装
   if (install.installed && _Vue === Vue) return
   install.installed = true
 
@@ -16,13 +17,14 @@ export function install (Vue) {
       i(vm, callVal)
     }
   }
-
+ // 全局注册一个混入，影响注册之后所有创建的每个 Vue 实例。插件作者可以使用混入，向组件注入自定义的行为。
   Vue.mixin({
     beforeCreate () {
       if (isDef(this.$options.router)) {
-        this._routerRoot = this
+        this._routerRoot = this // this 当前的vue实例
         this._router = this.$options.router
-        this._router.init(this)
+        this._router.init(this) // 调用vuerouter的init方法
+        // Vue.util.defineReactive
         Vue.util.defineReactive(this, '_route', this._router.history.current)
       } else {
         this._routerRoot = (this.$parent && this.$parent._routerRoot) || this
@@ -33,7 +35,6 @@ export function install (Vue) {
       registerInstance(this)
     }
   })
-
   Object.defineProperty(Vue.prototype, '$router', {
     get () { return this._routerRoot._router }
   })

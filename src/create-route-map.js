@@ -67,7 +67,7 @@ function addRouteRecord (
   if (process.env.NODE_ENV !== 'production') {
     // path必传
     assert(path != null, `"path" is required in a route configuration.`)
-    // component不能是string 
+    // component不能是string
     assert(
       typeof route.component !== 'string',
       `route config "component" for path: ${String(

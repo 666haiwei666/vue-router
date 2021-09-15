@@ -23,7 +23,7 @@ export function fillParams (
     // Fix #2505 resolving asterisk routes { name: 'not-found', params: { pathMatch: '/not-found' }}
     // and fix #3106 so that you can work with location descriptor object having params.pathMatch equal to empty string
     if (typeof params.pathMatch === 'string') params[0] = params.pathMatch
-    let result = filler(params, { pretty: true })
+    const result = filler(params, { pretty: true })
     // debugger
     return result
   } catch (e) {

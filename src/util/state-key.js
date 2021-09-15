@@ -3,7 +3,7 @@ import { inBrowser } from './dom'
 
 // use User Timing api (if present) for more accurate key precision
 // 是W3C性能小组引入的新的API，目前IE9以上的浏览器都支持。一个performance对象的完整结构如下图所示：
-// 
+//
 const Time =
   inBrowser && window.performance && window.performance.now
     ? window.performance
